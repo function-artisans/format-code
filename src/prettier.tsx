@@ -1,4 +1,4 @@
-import { format, BuiltInParserName } from "prettier";
+import { BuiltInParserName, format } from "prettier";
 
 import { Format } from "./format";
 import { getPreferences } from "./preferences";

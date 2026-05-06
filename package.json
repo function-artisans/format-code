@@ -5,7 +5,9 @@
   "description": "Format code on the clipboard",
   "icon": "icon.png",
   "author": "ikaraszi",
-  "categories": ["Developer Tools"],
+  "categories": [
+    "Developer Tools"
+  ],
   "license": "MIT",
   "commands": [
     {
@@ -109,6 +111,12 @@
       "title": "Format SQL",
       "description": "Formats SQL on the clipboard",
       "mode": "view"
+    },
+    {
+      "name": "format-sql-output",
+      "title": "Format SQL With Output",
+      "description": "Formats SQL with its result on the clipboard",
+      "mode": "view"
     }
   ],
   "preferences": [
@@ -126,25 +134,82 @@
       "type": "dropdown",
       "description": "Set the SQL dialect",
       "data": [
-        { "value": "sql", "title": "Standard SQL" },
-        { "value": "bigquery", "title": "GCP BigQuery" },
-        { "value": "db2", "title": "IBM DB2" },
-        { "value": "db2i", "title": "IBM DB2i (experimental)" },
-        { "value": "duckdb", "title": "DuckDB" },
-        { "value": "hive", "title": "Apache Hive" },
-        { "value": "mariadb", "title": "MariaDB" },
-        { "value": "mysql", "title": "MySQL" },
-        { "value": "tidb", "title": "TiDB" },
-        { "value": "n1ql", "title": "Couchbase N1QL" },
-        { "value": "plsql", "title": "Oracle PL/SQL" },
-        { "value": "postgresql", "title": "PostgreSQL" },
-        { "value": "redshift", "title": "Amazon Redshift" },
-        { "value": "singlestoredb", "title": "SingleStoreDB" },
-        { "value": "snowflake", "title": "Snowflake" },
-        { "value": "spark", "title": "Spark" },
-        { "value": "sqlite", "title": "SQLite" },
-        { "value": "transactsql", "title": "SQL Server Transact-SQL" },
-        { "value": "trino", "title": "Trino / Presto" }
+        {
+          "value": "sql",
+          "title": "Standard SQL"
+        },
+        {
+          "value": "bigquery",
+          "title": "GCP BigQuery"
+        },
+        {
+          "value": "db2",
+          "title": "IBM DB2"
+        },
+        {
+          "value": "db2i",
+          "title": "IBM DB2i (experimental)"
+        },
+        {
+          "value": "duckdb",
+          "title": "DuckDB"
+        },
+        {
+          "value": "hive",
+          "title": "Apache Hive"
+        },
+        {
+          "value": "mariadb",
+          "title": "MariaDB"
+        },
+        {
+          "value": "mysql",
+          "title": "MySQL"
+        },
+        {
+          "value": "tidb",
+          "title": "TiDB"
+        },
+        {
+          "value": "n1ql",
+          "title": "Couchbase N1QL"
+        },
+        {
+          "value": "plsql",
+          "title": "Oracle PL/SQL"
+        },
+        {
+          "value": "postgresql",
+          "title": "PostgreSQL"
+        },
+        {
+          "value": "redshift",
+          "title": "Amazon Redshift"
+        },
+        {
+          "value": "singlestoredb",
+          "title": "SingleStoreDB"
+        },
+        {
+          "value": "snowflake",
+          "title": "Snowflake"
+        },
+        {
+          "value": "spark",
+          "title": "Spark"
+        },
+        {
+          "value": "sqlite",
+          "title": "SQLite"
+        },
+        {
+          "value": "transactsql",
+          "title": "SQL Server Transact-SQL"
+        },
+        {
+          "value": "trino",
+          "title": "Trino / Presto"
+        }
       ],
       "required": false
     }

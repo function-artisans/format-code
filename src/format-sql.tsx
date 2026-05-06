@@ -4,9 +4,9 @@ import { Format } from "./format";
 import { getPreferences } from "./preferences";
 import { Formatter } from "./types";
 
-const { sqlDialect } = getPreferences();
+export const formatSQL: Formatter = async (input) => {
+  const { sqlDialect } = getPreferences();
 
-const formatter: Formatter = async (input) => {
   return format(input, {
     language: sqlDialect,
     functionCase: "upper",
@@ -15,4 +15,4 @@ const formatter: Formatter = async (input) => {
   });
 };
 
-export default () => <Format language="sql" formatter={formatter} />;
+export default () => <Format language="sql" formatter={formatSQL} />;
