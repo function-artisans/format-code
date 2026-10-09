@@ -1,17 +1,18 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Node 16",
-  "include": ["src/**/*", "raycast-env.d.ts"],
+  "include": ["src/cli.ts"],
   "compilerOptions": {
     "lib": ["es2021"],
-    "module": "commonjs",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "es2021",
+    "rootDir": "src",
+    "outDir": "dist",
     "strict": true,
-    "isolatedModules": true,
     "esModuleInterop": true,
+    "types": ["node"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx",
     "resolveJsonModule": true
   }
 }
