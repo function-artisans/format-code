@@ -46,3 +46,15 @@ open "Format JSON.shortcut"
 ```
 
 To see all the options, run `format-code shortcuts --help`.
+
+## Development
+
+The project uses [devenv](https://devenv.sh) to install Node.js and npm. To
+enter the dev shell, run:
+
+```sh
+devenv shell
+```
+
+If you use [direnv](https://direnv.net), run `direnv allow` one time. Then
+direnv loads the dev shell when you enter the folder.
