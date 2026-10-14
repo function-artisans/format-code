@@ -3,14 +3,7 @@
 import { parseArgs } from "node:util";
 import { format as prettierFormat } from "prettier";
 import { format as sqlFormat, SqlLanguage, supportedDialects } from "sql-formatter";
-import {
-  isLanguage,
-  isSqlLanguage,
-  Language,
-  languages,
-  parsePrintWidth,
-  prettierParsers,
-} from "./options.js";
+import { isLanguage, isSqlLanguage, Language, languages, parsePrintWidth, prettierParsers } from "./options.js";
 import { findBin, generateShortcuts } from "./shortcuts.js";
 
 function formatSQL(input: string, sqlDialect: SqlLanguage): string {
@@ -46,7 +39,7 @@ type FormatOptions = {
   sqlDialect?: SqlLanguage;
 };
 
-function format({ language, input, printWidth, sqlDialect = "sql" }: FormatOptions): string {
+async function format({ language, input, printWidth, sqlDialect = "sql" }: FormatOptions): Promise<string> {
   if (language === "sql") {
     return formatSQL(input, sqlDialect);
   }
@@ -142,14 +135,15 @@ async function runFormat(language: Language, values: CommandValues) {
   const sqlDialect = checkSqlDialect(values["sql-dialect"] ?? "sql");
   const input = await readStdin();
 
-  process.stdout.write(format({ language, input, printWidth, sqlDialect }));
+  process.stdout.write(await format({ language, input, printWidth, sqlDialect }));
 }
 
 async function runShortcuts(names: string[], values: CommandValues) {
   const selectedLanguages = names.length > 0 ? names.map(checkLanguage) : languages;
   const printWidth = values["print-width"] === undefined ? undefined : checkPrintWidth(values["print-width"]);
   const sqlDialect = values["sql-dialect"] === undefined ? undefined : checkSqlDialect(values["sql-dialect"]);
-  const bin = values.bin ?? findBin() ?? fail("Cannot find format-code on the PATH. Run 'npm link' or give --bin PATH.");
+  const bin =
+    values.bin ?? findBin() ?? fail("Cannot find format-code on the PATH. Install it globally or give --bin PATH.");
   const outDir = values.out ?? ".";
   const count = selectedLanguages.length;
 
