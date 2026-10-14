@@ -16,6 +16,12 @@
       };
     };
 
+    # Use the Prettier from node_modules. Prettier reads the line length from .editorconfig.
+    prettier = {
+      enable = true;
+      settings.binPath = "./node_modules/.bin/prettier";
+    };
+
     # The hook list has no TypeScript hook, so the hook runs the npm script.
     tsc = {
       enable = true;
