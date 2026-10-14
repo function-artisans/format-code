@@ -24,6 +24,7 @@
     "lint": "eslint src",
     "types": "tsc --noEmit",
     "format": "prettier --write .",
-    "prepare": "npm run build"
-  }
+    "prepare": "pnpm run build"
+  },
+  "packageManager": "pnpm@12.9.0"
 }

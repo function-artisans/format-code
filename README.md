@@ -5,9 +5,9 @@ Formats source code from stdin and writes the formatted code to stdout.
 ## Install
 
 ```sh
-npm install
-npm run build
-npm link
+pnpm install
+pnpm run build
+pnpm add --global "$PWD"
 ```
 
 ## Usage
@@ -49,7 +49,7 @@ To see all the options, run `format-code shortcuts --help`.
 
 ## Development
 
-The project uses [devenv](https://devenv.sh) to install Node.js and npm. To
+The project uses [devenv](https://devenv.sh) to install Node.js and pnpm. To
 enter the dev shell, run:
 
 ```sh

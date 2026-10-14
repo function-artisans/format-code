@@ -3,7 +3,7 @@
 {
   languages.javascript = {
     enable = true;
-    npm.enable = true;
+    pnpm.enable = true;
   };
 
   git-hooks.hooks = {
@@ -22,11 +22,12 @@
       settings.binPath = "./node_modules/.bin/prettier";
     };
 
-    # The hook list has no TypeScript hook, so the hook runs the npm script.
+    # The hook list has no TypeScript hook.
+    # Use the TypeScript from node_modules, so the hook and CI use the same version.
     tsc = {
       enable = true;
       name = "tsc";
-      entry = "npm run types";
+      entry = "./node_modules/.bin/tsc --noEmit";
       files = "\\.ts$|^tsconfig\\.json$";
       pass_filenames = false;
     };

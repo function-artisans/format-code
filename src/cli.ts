@@ -143,7 +143,7 @@ async function runShortcuts(names: string[], values: CommandValues) {
   const printWidth = values["print-width"] === undefined ? undefined : checkPrintWidth(values["print-width"]);
   const sqlDialect = values["sql-dialect"] === undefined ? undefined : checkSqlDialect(values["sql-dialect"]);
   const bin =
-    values.bin ?? findBin() ?? fail("Cannot find format-code on the PATH. Run 'npm link' or give --bin PATH.");
+    values.bin ?? findBin() ?? fail("Cannot find format-code on the PATH. Install it globally or give --bin PATH.");
   const outDir = values.out ?? ".";
   const count = selectedLanguages.length;
 
