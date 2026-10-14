@@ -3,14 +3,7 @@
 import { parseArgs } from "node:util";
 import { format as prettierFormat } from "prettier";
 import { format as sqlFormat, SqlLanguage, supportedDialects } from "sql-formatter";
-import {
-  isLanguage,
-  isSqlLanguage,
-  Language,
-  languages,
-  parsePrintWidth,
-  prettierParsers,
-} from "./options.js";
+import { isLanguage, isSqlLanguage, Language, languages, parsePrintWidth, prettierParsers } from "./options.js";
 import { findBin, generateShortcuts } from "./shortcuts.js";
 
 function formatSQL(input: string, sqlDialect: SqlLanguage): string {
@@ -149,7 +142,8 @@ async function runShortcuts(names: string[], values: CommandValues) {
   const selectedLanguages = names.length > 0 ? names.map(checkLanguage) : languages;
   const printWidth = values["print-width"] === undefined ? undefined : checkPrintWidth(values["print-width"]);
   const sqlDialect = values["sql-dialect"] === undefined ? undefined : checkSqlDialect(values["sql-dialect"]);
-  const bin = values.bin ?? findBin() ?? fail("Cannot find format-code on the PATH. Run 'npm link' or give --bin PATH.");
+  const bin =
+    values.bin ?? findBin() ?? fail("Cannot find format-code on the PATH. Run 'npm link' or give --bin PATH.");
   const outDir = values.out ?? ".";
   const count = selectedLanguages.length;
 
