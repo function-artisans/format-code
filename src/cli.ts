@@ -46,7 +46,7 @@ type FormatOptions = {
   sqlDialect?: SqlLanguage;
 };
 
-function format({ language, input, printWidth, sqlDialect = "sql" }: FormatOptions): string {
+async function format({ language, input, printWidth, sqlDialect = "sql" }: FormatOptions): Promise<string> {
   if (language === "sql") {
     return formatSQL(input, sqlDialect);
   }
@@ -142,7 +142,7 @@ async function runFormat(language: Language, values: CommandValues) {
   const sqlDialect = checkSqlDialect(values["sql-dialect"] ?? "sql");
   const input = await readStdin();
 
-  process.stdout.write(format({ language, input, printWidth, sqlDialect }));
+  process.stdout.write(await format({ language, input, printWidth, sqlDialect }));
 }
 
 async function runShortcuts(names: string[], values: CommandValues) {
