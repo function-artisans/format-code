@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { defineCommand, runMain } from "citty";
+import { parseArgs } from "node:util";
 import { format as prettierFormat } from "prettier";
 import { format as sqlFormat, SqlLanguage, supportedDialects } from "sql-formatter";
 import {
@@ -74,58 +74,91 @@ async function readStdin(): Promise<string> {
   return chunks.join("");
 }
 
-const main = defineCommand({
-  meta: { description: "Format code from the clipboard" },
-  args: {
-    language: {
-      type: "positional",
-      description: `Language to format (${languages.join(", ")})`,
-      required: true,
+function fail(message: string): never {
+  console.error(message);
+  process.exit(1);
+}
+
+function checkPrintWidth(value: string): number {
+  const printWidth = parsePrintWidth(value);
+
+  if (printWidth === undefined) {
+    fail(`Invalid print width: ${value}\nPrint width must be a positive integer`);
+  }
+
+  return printWidth;
+}
+
+function checkSqlDialect(value: string): SqlLanguage {
+  if (!isSqlLanguage(value)) {
+    fail(`Unknown SQL dialect: ${value}\nSQL dialects: ${supportedDialects.join(", ")}`);
+  }
+
+  return value;
+}
+
+function checkLanguage(value: string): Language {
+  if (!isLanguage(value)) {
+    fail(`Unknown language: ${value}\nLanguages: ${languages.join(", ")}`);
+  }
+
+  return value;
+}
+
+const usage = `Usage:
+  format-code <language> [options] < input
+
+Format the code from stdin and write the result to stdout.
+
+Languages:
+  ${languages.join(", ")}
+
+Options:
+  --print-width N     Prettier print width (default: 100)
+  --sql-dialect NAME  SQL dialect (default: sql)
+  -h, --help          Show this help
+
+SQL dialects:
+  ${supportedDialects.join(", ")}`;
+
+type CommandValues = {
+  "print-width"?: string;
+  "sql-dialect"?: string;
+};
+
+async function runFormat(language: Language, values: CommandValues) {
+  const printWidth = checkPrintWidth(values["print-width"] ?? "100");
+  const sqlDialect = checkSqlDialect(values["sql-dialect"] ?? "sql");
+  const input = await readStdin();
+
+  process.stdout.write(format({ language, input, printWidth, sqlDialect }));
+}
+
+async function main() {
+  const { values, positionals } = parseArgs({
+    allowPositionals: true,
+    options: {
+      "print-width": { type: "string" },
+      "sql-dialect": { type: "string" },
+      help: { type: "boolean", short: "h" },
     },
-    "print-width": {
-      type: "string",
-      description: "Prettier print width",
-      default: "100",
-    },
-    "sql-dialect": {
-      type: "string",
-      description: `SQL dialect (${supportedDialects.join(", ")})`,
-      default: "sql",
-    },
-  },
-  async run({ args }) {
-    const language = args.language;
-    const printWidth = parsePrintWidth(args["print-width"]);
-    const sqlDialect = args["sql-dialect"];
+  });
+  const [command, ...rest] = positionals;
 
-    if (!isLanguage(language)) {
-      console.error(`Unknown language: ${language}`);
-      console.error(`Languages: ${languages.join(", ")}`);
-      process.exit(1);
-    }
+  if (values.help) {
+    console.log(usage);
+    return;
+  }
 
-    if (printWidth === undefined) {
-      console.error(`Invalid print width: ${args["print-width"]}`);
-      console.error("Print width must be a positive integer");
-      process.exit(1);
-    }
+  if (command === undefined) {
+    fail(usage);
+  }
 
-    if (!isSqlLanguage(sqlDialect)) {
-      console.error(`Unknown SQL dialect: ${sqlDialect}`);
-      console.error(`SQL dialects: ${supportedDialects.join(", ")}`);
-      process.exit(1);
-    }
+  if (rest.length > 0) {
+    fail(`Unexpected argument: ${rest[0]}`);
+  }
 
-    try {
-      const input = await readStdin();
-      const output = format({ language, input, printWidth, sqlDialect });
+  await runFormat(checkLanguage(command), values);
+}
 
-      process.stdout.write(output);
-    } catch (e) {
-      console.error(e instanceof Error ? e.message : e);
-      process.exit(1);
-    }
-  },
-});
-
-runMain(main);
+main().catch((e) => fail(e instanceof Error ? e.message : String(e)));

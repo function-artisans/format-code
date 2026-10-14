@@ -13,7 +13,7 @@ npm link
 ## Usage
 
 ```sh
-format-code <language> [--print-width 100] [--sql-dialect sql] < input
+format-code <language> [--print-width=100] [--sql-dialect=sql] < input
 ```
 
 Languages: `angular`, `css`, `glimmer`, `graphql`, `html`, `javascript`, `json`,
