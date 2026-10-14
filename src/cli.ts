@@ -1,58 +1,16 @@
 #!/usr/bin/env node
 
 import { defineCommand, runMain } from "citty";
-import { BuiltInParserName, format as prettierFormat } from "prettier";
+import { format as prettierFormat } from "prettier";
 import { format as sqlFormat, SqlLanguage, supportedDialects } from "sql-formatter";
-
-type PrettierLanguage =
-  | "angular"
-  | "css"
-  | "glimmer"
-  | "graphql"
-  | "html"
-  | "javascript"
-  | "json"
-  | "json5"
-  | "less"
-  | "lwc"
-  | "markdown"
-  | "mdx"
-  | "scss"
-  | "typescript"
-  | "vue"
-  | "yaml";
-
-type Language = PrettierLanguage | "sql" | "sql-output";
-
-const prettierParsers: Record<PrettierLanguage, BuiltInParserName> = {
-  angular: "angular",
-  css: "css",
-  glimmer: "glimmer",
-  graphql: "graphql",
-  html: "html",
-  javascript: "babel",
-  json5: "json5",
-  json: "json",
-  less: "less",
-  lwc: "lwc",
-  markdown: "markdown",
-  mdx: "mdx",
-  scss: "scss",
-  typescript: "typescript",
-  vue: "vue",
-  yaml: "yaml",
-};
-
-const languages: Language[] = [...(Object.keys(prettierParsers) as PrettierLanguage[]), "sql", "sql-output"];
-
-function isSqlLanguage(value: string): value is SqlLanguage {
-  return supportedDialects.includes(value);
-}
-
-function parsePrintWidth(value: string): number | undefined {
-  const printWidth = Number(value);
-  return Number.isInteger(printWidth) && printWidth > 0 ? printWidth : undefined;
-}
+import {
+  isLanguage,
+  isSqlLanguage,
+  Language,
+  languages,
+  parsePrintWidth,
+  prettierParsers,
+} from "./options.js";
 
 function formatSQL(input: string, sqlDialect: SqlLanguage): string {
   return sqlFormat(input, {
@@ -136,11 +94,11 @@ const main = defineCommand({
     },
   },
   async run({ args }) {
-    const language = args.language as Language;
+    const language = args.language;
     const printWidth = parsePrintWidth(args["print-width"]);
     const sqlDialect = args["sql-dialect"];
 
-    if (!languages.includes(language)) {
+    if (!isLanguage(language)) {
       console.error(`Unknown language: ${language}`);
       console.error(`Languages: ${languages.join(", ")}`);
       process.exit(1);
