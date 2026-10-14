@@ -3,8 +3,12 @@
 # dependencies
 /node_modules
 
-# Raycast specific files
-raycast-env.d.ts
+# build output
+/dist
 
 # misc
 .DS_Store
+
+# devenv
+.devenv
+.devenv.flake.nix

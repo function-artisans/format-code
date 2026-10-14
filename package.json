@@ -1,174 +1,30 @@
 {
-  "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "format-code",
-  "title": "Format Code",
+  "name": "@function-artisans/format-code",
+  "version": "1.0.0",
   "description": "Format code on the clipboard",
-  "icon": "icon.png",
+  "bin": {
+    "format-code": "./dist/cli.js"
+  },
   "author": "ikaraszi",
-  "categories": ["Developer Tools"],
+  "type": "module",
   "license": "MIT",
-  "commands": [
-    {
-      "name": "format-angular",
-      "title": "Format Angular",
-      "description": "Formats Angular on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-css",
-      "title": "Format CSS",
-      "description": "Formats CSS on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-glimmer",
-      "title": "Format Glimmer",
-      "description": "Formats Glimmer on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-graphql",
-      "title": "Format GraphQL",
-      "description": "Formats GraphQL on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-html",
-      "title": "Format HTML",
-      "description": "Formats HTML on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-javascript",
-      "title": "Format JavaScript",
-      "description": "Formats JavaScript on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-json",
-      "title": "Format JSON",
-      "description": "Formats JSON on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-json5",
-      "title": "Format JSON5",
-      "description": "Formats JSON5 on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-less",
-      "title": "Format Less",
-      "description": "Formats Less on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-lwc",
-      "title": "Format LWC",
-      "description": "Formats LWC on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-markdown",
-      "title": "Format Markdown",
-      "description": "Formats Markdown on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-mdx",
-      "title": "Format MDX",
-      "description": "Formats MDX on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-scss",
-      "title": "Format SCSS",
-      "description": "Formats SCSS on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-typescript",
-      "title": "Format TypeScript",
-      "description": "Formats TypeScript on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-vue",
-      "title": "Format Vue",
-      "description": "Formats Vue on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-yaml",
-      "title": "Format YAML",
-      "description": "Formats YAML on the clipboard",
-      "mode": "view"
-    },
-    {
-      "name": "format-sql",
-      "title": "Format SQL",
-      "description": "Formats SQL on the clipboard",
-      "mode": "view"
-    }
-  ],
-  "preferences": [
-    {
-      "name": "printWidth",
-      "title": "Print Width",
-      "type": "textfield",
-      "description": "Specify the line length that the printer will wrap on.",
-      "placeholder": "100",
-      "required": false
-    },
-    {
-      "name": "sqlDialect",
-      "title": "SQL dialect",
-      "type": "dropdown",
-      "description": "Set the SQL dialect",
-      "data": [
-        { "value": "sql", "title": "Standard SQL" },
-        { "value": "bigquery", "title": "GCP BigQuery" },
-        { "value": "db2", "title": "IBM DB2" },
-        { "value": "db2i", "title": "IBM DB2i (experimental)" },
-        { "value": "duckdb", "title": "DuckDB" },
-        { "value": "hive", "title": "Apache Hive" },
-        { "value": "mariadb", "title": "MariaDB" },
-        { "value": "mysql", "title": "MySQL" },
-        { "value": "tidb", "title": "TiDB" },
-        { "value": "n1ql", "title": "Couchbase N1QL" },
-        { "value": "plsql", "title": "Oracle PL/SQL" },
-        { "value": "postgresql", "title": "PostgreSQL" },
-        { "value": "redshift", "title": "Amazon Redshift" },
-        { "value": "singlestoredb", "title": "SingleStoreDB" },
-        { "value": "snowflake", "title": "Snowflake" },
-        { "value": "spark", "title": "Spark" },
-        { "value": "sqlite", "title": "SQLite" },
-        { "value": "transactsql", "title": "SQL Server Transact-SQL" },
-        { "value": "trino", "title": "Trino / Presto" }
-      ],
-      "required": false
-    }
-  ],
   "dependencies": {
-    "@raycast/api": "^1.55.2",
-    "@raycast/utils": "^1.8.0",
     "prettier": "^2.8.8",
     "sql-formatter": "^15.6.2"
   },
   "devDependencies": {
-    "@raycast/eslint-config": "1.0.5",
-    "@types/node": "18.8.3",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.6.0",
     "@types/prettier": "^2.7.3",
-    "@types/react": "18.0.9",
-    "eslint": "^7.32.0",
-    "typescript": "^4.4.3"
+    "eslint": "^10.3.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.2"
   },
   "scripts": {
-    "build": "ray build -e dist",
-    "dev": "ray develop",
-    "fix-lint": "ray lint --fix",
-    "eslint": "eslint src",
-    "lint": "ray lint",
-    "publish": "npx @raycast/api@latest publish"
+    "build": "tsc",
+    "lint": "eslint src",
+    "types": "tsc --noEmit",
+    "format": "prettier --write .",
+    "prepare": "npm run build"
   }
 }
