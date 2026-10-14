@@ -40,6 +40,27 @@ export const prettierParsers: Record<PrettierLanguage, BuiltInParserName> = {
   yaml: "yaml",
 };
 
+export const displayNames: Record<Language, string> = {
+  angular: "Angular",
+  css: "CSS",
+  glimmer: "Glimmer",
+  graphql: "GraphQL",
+  html: "HTML",
+  javascript: "JavaScript",
+  json: "JSON",
+  json5: "JSON5",
+  less: "Less",
+  lwc: "LWC",
+  markdown: "Markdown",
+  mdx: "MDX",
+  scss: "SCSS",
+  sql: "SQL",
+  "sql-output": "SQL output",
+  typescript: "TypeScript",
+  vue: "Vue",
+  yaml: "YAML",
+};
+
 export const languages: Language[] = [...(Object.keys(prettierParsers) as PrettierLanguage[]), "sql", "sql-output"];
 
 export function isLanguage(value: string): value is Language {

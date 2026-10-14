@@ -28,3 +28,21 @@ To format the code on the macOS clipboard, run:
 ```sh
 pbpaste | format-code json | pbcopy
 ```
+
+## macOS shortcuts
+
+To generate a signed shortcut for each language, run:
+
+```sh
+format-code shortcuts --sql-dialect postgresql
+```
+
+Each shortcut formats the code on the clipboard and copies the result back to the
+clipboard. The command writes the files to the current directory. To import a
+shortcut, open its file:
+
+```sh
+open "Format JSON.shortcut"
+```
+
+To see all the options, run `format-code shortcuts --help`.

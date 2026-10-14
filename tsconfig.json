@@ -2,10 +2,10 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "include": ["src"],
   "compilerOptions": {
-    "lib": ["es2021"],
+    "lib": ["es2022"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "target": "es2021",
+    "target": "es2022",
     "rootDir": "src",
     "outDir": "dist",
     "strict": true,

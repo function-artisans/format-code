@@ -11,6 +11,7 @@ import {
   parsePrintWidth,
   prettierParsers,
 } from "./options.js";
+import { findBin, generateShortcuts } from "./shortcuts.js";
 
 function formatSQL(input: string, sqlDialect: SqlLanguage): string {
   return sqlFormat(input, {
@@ -107,6 +108,7 @@ function checkLanguage(value: string): Language {
 
 const usage = `Usage:
   format-code <language> [options] < input
+  format-code shortcuts [options] [language...]
 
 Format the code from stdin and write the result to stdout.
 
@@ -118,12 +120,21 @@ Options:
   --sql-dialect NAME  SQL dialect (default: sql)
   -h, --help          Show this help
 
+The shortcuts command generates signed macOS shortcuts that format the code on
+the clipboard. If you give no language, it generates a shortcut for each language.
+
+Shortcuts options:
+  --bin PATH          Path of the format-code binary (default: the one on the PATH)
+  --out DIR           Output directory (default: the current directory)
+
 SQL dialects:
   ${supportedDialects.join(", ")}`;
 
 type CommandValues = {
   "print-width"?: string;
   "sql-dialect"?: string;
+  bin?: string;
+  out?: string;
 };
 
 async function runFormat(language: Language, values: CommandValues) {
@@ -134,12 +145,29 @@ async function runFormat(language: Language, values: CommandValues) {
   process.stdout.write(format({ language, input, printWidth, sqlDialect }));
 }
 
+async function runShortcuts(names: string[], values: CommandValues) {
+  const selectedLanguages = names.length > 0 ? names.map(checkLanguage) : languages;
+  const printWidth = values["print-width"] === undefined ? undefined : checkPrintWidth(values["print-width"]);
+  const sqlDialect = values["sql-dialect"] === undefined ? undefined : checkSqlDialect(values["sql-dialect"]);
+  const bin = values.bin ?? findBin() ?? fail("Cannot find format-code on the PATH. Run 'npm link' or give --bin PATH.");
+  const outDir = values.out ?? ".";
+  const count = selectedLanguages.length;
+
+  console.error(`Apple signs ${count} ${count === 1 ? "shortcut" : "shortcuts"}. Each shortcut takes a few seconds.`);
+
+  for await (const path of generateShortcuts({ languages: selectedLanguages, outDir, bin, printWidth, sqlDialect })) {
+    console.log(path);
+  }
+}
+
 async function main() {
   const { values, positionals } = parseArgs({
     allowPositionals: true,
     options: {
       "print-width": { type: "string" },
       "sql-dialect": { type: "string" },
+      bin: { type: "string" },
+      out: { type: "string" },
       help: { type: "boolean", short: "h" },
     },
   });
@@ -152,6 +180,11 @@ async function main() {
 
   if (command === undefined) {
     fail(usage);
+  }
+
+  if (command === "shortcuts") {
+    await runShortcuts(rest, values);
+    return;
   }
 
   if (rest.length > 0) {
