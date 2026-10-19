@@ -13,21 +13,24 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # The action reads the pnpm version from the packageManager field in package.json.
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      # The devenv cache has prebuilt packages, so the dev shell builds faster.
+      - name: Use the devenv cache
+        uses: cachix/cachix-action@v17
         with:
-          node-version: "22"
-          cache: "pnpm"
+          name: devenv
 
+      - name: Install devenv
+        run: nix profile add nixpkgs#devenv
+
+      # The eslint, tsc and prettier hooks use the tools from node_modules.
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: devenv shell -- pnpm install --frozen-lockfile
 
-      - name: Run lint
-        run: pnpm run lint
+      - name: Run the git hooks
+        run: devenv test
 
       - name: Run build
-        run: pnpm run build
+        run: devenv shell -- pnpm run build
