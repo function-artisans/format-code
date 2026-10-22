@@ -30,12 +30,14 @@ function shellCommand(language: Language, { bin, printWidth, sqlDialect }: Comma
   if (printWidth !== undefined) parts.push(`--print-width=${printWidth}`);
   if (sqlDialect && language.startsWith("sql")) parts.push(`--sql-dialect=${sqlDialect}`);
 
+  // Shortcuts turns a script result that looks like JSON into a dictionary and loses the format.
+  parts.push("|", "pbcopy");
+
   return parts.join(" ");
 }
 
 function shortcutPlist(name: string, command: string): string {
   const scriptUUID = randomUUID().toUpperCase();
-  const clipboardUUID = randomUUID().toUpperCase();
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -77,29 +79,6 @@ function shortcutPlist(name: string, command: string): string {
         <string>/bin/bash</string>
         <key>UUID</key>
         <string>${scriptUUID}</string>
-      </dict>
-    </dict>
-    <dict>
-      <key>WFWorkflowActionIdentifier</key>
-      <string>is.workflow.actions.setclipboard</string>
-      <key>WFWorkflowActionParameters</key>
-      <dict>
-        <key>UUID</key>
-        <string>${clipboardUUID}</string>
-        <key>WFInput</key>
-        <dict>
-          <key>Value</key>
-          <dict>
-            <key>OutputName</key>
-            <string>Shell Script Result</string>
-            <key>OutputUUID</key>
-            <string>${scriptUUID}</string>
-            <key>Type</key>
-            <string>ActionOutput</string>
-          </dict>
-          <key>WFSerializationType</key>
-          <string>WFTextTokenAttachment</string>
-        </dict>
       </dict>
     </dict>
   </array>
